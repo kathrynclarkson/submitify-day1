@@ -1,14 +1,14 @@
 /*
 	This is the front-end javascript for our website. It handles displaying the
 	projects to the user. You can think of this as the "view" of the site.
-*/
+	*/
 
 /*
 	This function takes in a project (object with name, author, description, and
 	votes array), and returns a DOM element clone of the project template. (An
 	HTML element that we can append to the page later).
-*/
-function createProjectHMTL(project) {
+	*/
+	function createProjectHMTL(project) {
 	// clone the template
 	var projectDiv = $('#project_template').clone();
 	// remove the id (only one thing with each id)
@@ -26,16 +26,18 @@ function createProjectHMTL(project) {
 		buttonEl.attr("disabled", "disabled");
 		buttonEl.text("Votes: " + project.votes.length);
 	}
+
+
+
 	buttonEl.click(function(){
 		$.post('/api/vote', {name: project.name}, function(res) {
 			if (res.voted) {
-			buttonEl.text("You Voted! Votes: " + res.votes);
-		} else {
-			buttonEl.text("You can't vote twice!" + res.votes);
-			buttonEl.attr("disabled", "disabled");
-		}
+				buttonEl.text("You Voted! Votes: " + res.votes);
+			} else {
+				buttonEl.text("You can't vote twice!" + res.votes);
+				buttonEl.attr("disabled", "disabled");
+			}
 		});
-
 	});
 	// return a reference to the clone
 	return projectDiv;
@@ -43,16 +45,16 @@ function createProjectHMTL(project) {
 
 /*
 	On page load...
-*/
-$(document).ready(function() {
+	*/
+	$(document).ready(function() {
 
 	/*
 		Get all of the projects from the server via AJAX. Uses the
 		"/api/projects" endpoint. If the response is an empty array, display
 		"No projects!". Otherwise we build the projects into HTML and display
 		them on the page.
-	*/
-	$.get('/api/projects', function(res) {
+		*/
+		$.get('/api/projects', function(res) {
 		// res here is what we ("res.send") on the backend
 		if (res.length === 0) {
 			$('#projects').text("No projects!");
@@ -61,13 +63,12 @@ $(document).ready(function() {
 				// for-in, since for-of sometimes doesn't work on frontend
 				$('#projects').append(createProjectHMTL(res[i]));
 			}
-		}
-	}, 'json'); //'json' = auto parse as json
+		}}, 'json'); //'json' = auto parse as json
 
-	/*
+		/*
 		When we click on the "send new project" button...
-	*/
-	$('#send_new_project').click(function() {
+		*/
+		$('#send_new_project').click(function() {
 		// gather our data
 		var project = {
 			name: $('#new_project_name').val(),
@@ -78,6 +79,40 @@ $(document).ready(function() {
 		// note that the second argument here will become res.body on the server
 		$.post('/api/project', project, function(res) {
 			$('#projects').append(createProjectHMTL(res));
-		}, 'json');
+		}, 'json');});
+
+		$("#register").click(function() {
+			var name = $("#name").val();
+			var email = $("#email").val();
+			var password = $("#password").val();
+			var cpassword = $("#cpassword").val();
+			if (name == '' || email == '' || password == '' || cpassword == '') {
+				alert("Please fill all fields");
+			} else if ((password.length) < 8) {
+				alert("Password should be at least 8 character in length");
+			} else if (!(password).match(cpassword)) {
+				alert("Your passwords don't match. Try again?");
+			} else {
+				$.post("/api/register", {
+					name: name,
+					email: email,
+					password: password
+				}, function(data) {
+					if (data == 'You have Successfully Registered!') {
+						$("form")[0].reset();
+					}
+					alert(data);
+				});
+			}
+		});
+
+		$('#sign-in').click(function() {
+			// Sign in clicked
+			var name = $('#username').val();
+			var pw = $('#sign-in-password').val();
+			$.post('/login', { name: name, password: pw}, function(res) {
+				alert(res);
+			});
+		});
+
 	});
-});

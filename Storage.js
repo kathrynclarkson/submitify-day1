@@ -9,12 +9,36 @@ function Storage() {
 	var projects = [];
 	var users = [];
 
-	this.addProject = (project, cb)  => {
+	this.authenticateUser = (name, pw) => {
+		for (var i = 0; i < users.length; i++) {
+			if (users[i].name === name && users[i].password === pw) {
+				return true;
+			}
+		}
+		return false;
+	};
+
+	this.addProject = (project, cb) => {
 		// cb = callback
 		projects.push(project);
 		if (cb) {
 			cb();
 		}
+	};
+
+	this.addUser = (userObject) => {
+		users.push(userObject);
+		console.log(users);
+	};
+
+	this.userExists = (username, email) => {
+		for (var i = 0; i < users.length; i++) {
+			var currentUser = users[i];
+			if (currentUser.name === username || currentUser === email) {
+				return true;
+			}
+		}
+		return false;
 	};
 
 	this.getAllProjects = (cb) => {

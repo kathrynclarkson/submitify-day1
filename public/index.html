@@ -7,18 +7,46 @@
 	<script src="./index_front.js"></script>
 </head>
 <body>
-	<div id="project_template" style="display: none;">
-		<h3 class="project_name"></h3>
-		<p class="project_author"></p>
-		<p class="project_description"></p>
-		<button class "project_vote">Vote</button>
-	</div>
-	<div id="projects"></div>
 
-	<div>
-		<p>Name: <input id="new_project_name"></p>
-		<p>Description: <textarea id="new_project_description"></textarea></p>
-		<p><button id="send_new_project">Submit Project</button></p>
+	<div class="container">
+
+		<form class="form" method="post" action="#">
+			<h2>Register</h2>
+			<label>Full Name:</label>
+			<input type="text" name="dname" id="name">
+			<label>Email:</label>
+			<input type="text" name="demail" id="email">
+			<label>Password:</label>
+			<input type="password" name="password" id="password">
+			<label>Confirm Password:</label>
+			<input type="password" name="cpassword" id="cpassword">
+			<input type="button" name="register" id="register" value="Register">
+		</form>
+
+		<form action="#" class="form">
+			<h2>Sign In</h2>
+			<label>Username:</label>
+			<input type="text" id="username">
+			<label>Password:</label>
+			<input type="password" id="sign-in-password">
+			<input type="button" id="sign-in" value="Sign In">
+		</form>
+
+
+		<div id="project_template" style="display: none;">
+			<h3 class="project_name"></h3>
+			<p class="project_author"></p>
+			<p class="project_description"></p>
+			<button class "project_vote">Vote</button>
+		</div>
+
+		<div id="projects"></div>
+
+		<div>
+			<p>Name: <input id="new_project_name"></p>
+			<p>Description: <textarea id="new_project_description"></textarea></p>
+			<p><button id="send_new_project">Submit Project</button></p>
+		</div>
 	</div>
 </body>
 </html>

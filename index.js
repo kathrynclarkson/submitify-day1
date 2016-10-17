@@ -20,13 +20,13 @@ var storage = new Storage();
 
 // Create two test projects, so we have some data on the frontend.
 // Todo: remove this for production!
-storage.addProject(
-	new Project("Test", "Testing a project", "Me")
-	);
+// storage.addProject(
+// 	new Project("Test", "Testing a project", "Me")
+// 	);
 
-storage.addProject(
-	new Project("Test 2", "Testing another project", "You")
-	);
+// storage.addProject(
+// 	new Project("Test 2", "Testing another project", "You")
+// 	);
 
 // give us req.body for post requests
 var bodyParser = require("body-parser");
@@ -68,6 +68,30 @@ app.post("/api/vote", (req,res ) => {
 			votes: proj.getVoteCount()
 		});
 	});		
+});
+
+app.post('/api/register', (req, res) => {
+	var name = req.body.name;
+	var email = req.body.email;
+	var password = req.body.password;
+	// check that username and email dont already exist
+	if (!storage.userExists(name, email)) {
+		// save new user
+		storage.addUser(req.body);
+		res.send("User created successfully.");
+	} else {
+		res.send("Please try a different email and/or username.");
+	}
+});
+
+app.post('/login', (req, res) => {
+	var name = req.body.name;
+	var pw = req.body.password;
+	if (storage.authenticateUser(name, pw)) {
+		res.send('Login successful');
+	} else {
+		res.send('Incorrect username or password');
+	}
 });
 
 // serve anything in the "public" directory without changes
